@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Repositories
 {
-    public class UnitOfOWork :IUnitOfWork
+    public class UOW :IUnitOfWork
     {
     }
 }
