@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Repositories.Interfaces
 {
-    interface IBaseRepository<T> where T : EntityBase
+    public interface IBaseRepository<T> where T : EntityBase
     {
         Task<IEnumerable<T>> GetAll();
         Task<T> GetById(int id);
