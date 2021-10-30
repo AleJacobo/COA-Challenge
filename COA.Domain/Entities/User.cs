@@ -23,7 +23,7 @@ namespace COA.Domain
         public string Email { get; set; }
 
         [Required]
-        [Column(TypeName = "INTEGER(20)")]
+        [Column(TypeName = "INTEGER")]
         [MaxLength(20)]
         public int Phone { get; set; }
 
