@@ -29,7 +29,7 @@ namespace COA_Challenge.Controllers
                 var request = await _usersServices.GetAll();
 
                 if (request == null)
-                    return NotFound(new Result().Fail($"No se han encontrado registros de usuario"));
+                    return NoContent();
 
                 return Ok(request);
             }
@@ -41,14 +41,14 @@ namespace COA_Challenge.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<UserDTO>> GetById(int id )
+        public async Task<ActionResult<UserDTO>> GetById(int id)
         {
             try
             {
                 var request = await _usersServices.GetById(id);
 
                 if (request == null)
-                    return NotFound(new Result().Fail($"No se ha encontrado este usuario con el Id especifico"));
+                    return NoContent();
 
                 return Ok(request);
             }
@@ -57,6 +57,30 @@ namespace COA_Challenge.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "No se ha podido ejecutar la operacion.");
             }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Result>> Insert([FromForm]UserInsertDTO userInsertDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return StatusCode(StatusCodes.Status406NotAcceptable,
+                        "Los parametros ingresados no son correctos, intente de nuevo");
+
+                var request = await _usersServices.Insert(userInsertDTO);
+                
+                if (request.HasErrors == true)
+                    return BadRequest(request.Messages);
+
+                return Ok(request);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "No se ha podido ejecutar la operacion.");
+            }
+
         }
     }
 }

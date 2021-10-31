@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using COA.Core.Interfaces;
 using COA.Domain;
+using COA.Domain.Common;
 using COA.Domain.DTOs.UserDTOs;
 using COA.Infrastructure.Repositories;
 using System;
@@ -53,6 +54,21 @@ namespace COA.Core.Services
             {
                 throw;
             }
+        }
+        public async Task<Result> Insert(UserInsertDTO userInsertDTO)
+        {
+            try
+            {
+                var request = _mapper.Map<UserInsertDTO, User>(userInsertDTO);
+                var response= await _uow.UsersRepository.Insert(request);
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new Result().Fail(e.Message);
+            }
+
         }
     }
 }

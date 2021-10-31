@@ -8,6 +8,7 @@ namespace COA.Domain.Profiles
         public UserProfile()
         {
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UserInsertDTO>().ReverseMap();
         }
     }
 }
