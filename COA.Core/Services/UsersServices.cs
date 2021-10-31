@@ -20,6 +20,7 @@ namespace COA.Core.Services
             _uow = uow;
             _mapper = mapper;
         }
+
         #endregion
         public async Task<IEnumerable<UserDTO>> GetAll()
         {
@@ -77,7 +78,7 @@ namespace COA.Core.Services
             try
             {
                 if (_uow.UsersRepository.EntityExists(id) == false)
-                    return new Result().Fail($"Este usuario no se encuentra registrado");
+                    return null;
 
                 var userDb = await _uow.UsersRepository.GetById(id);
 
@@ -96,6 +97,25 @@ namespace COA.Core.Services
                 return new Result().Fail(e.Message);
             }
 
+        }
+        public async Task<Result> Delete(int id)
+        {
+            try
+            {
+                if (_uow.UsersRepository.EntityExists(id) == false)
+                    return null;
+
+                var response = await _uow.UsersRepository.Delete(id);
+
+                await _uow.SaveChangesAsync();
+
+                return response;
+
+            }
+            catch (Exception e)
+            {
+                return new Result().Fail(e.Message);
+            }
         }
     }
 }

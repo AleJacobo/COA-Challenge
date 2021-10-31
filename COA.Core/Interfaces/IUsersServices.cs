@@ -11,5 +11,6 @@ namespace COA.Core.Interfaces
         Task<UserDTO> GetById(int id);
         Task<Result> Insert(UserInsertDTO userInsertDTO);
         Task<Result> Update(UserUpdateDTO userUpdateDTO,int id);
+        Task<Result> Delete(int id);
     }
 }

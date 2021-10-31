@@ -94,7 +94,7 @@ namespace COA_Challenge.Controllers
 
                 var request = await _usersServices.Update(userUpdateDTO,id);
 
-                if (request.HasErrors == true)
+                if (request==null || request.HasErrors==true)
                     return BadRequest(request.Messages);
 
                 return Ok(request);
@@ -103,6 +103,23 @@ namespace COA_Challenge.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "No se ha podido ejecutar la operacion.");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Result>> Delete(int id)
+        {
+            try
+            {
+                var request = await _usersServices.Delete(id);
+                if (request.HasErrors == true)
+                    return BadRequest(request.Messages);
+
+                return Ok(request);
+            }
+            catch (Exception e)
+            {
+                return new Result().Fail(e.Message);
             }
         }
     }

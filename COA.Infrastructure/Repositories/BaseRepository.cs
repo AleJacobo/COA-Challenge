@@ -26,7 +26,9 @@ namespace COA.Infrastructure.Repositories
 
         public async Task<T> GetById(int id)
         {
-            var request = await _entity.FindAsync(id);
+            var request = await _entity.Where(x => x.IsDeleted == false && x.Id == id)
+                .FirstOrDefaultAsync();
+                
             return request;
         }
         public async Task<IEnumerable<T>> GetAll()
@@ -52,10 +54,6 @@ namespace COA.Infrastructure.Repositories
         public async Task<Result> Delete(int id)
         {
             var entity = await _entity.FindAsync(id);
-            if (entity == null)
-            {
-                return new Result().Fail("El id no existe");
-            }
 
             entity.IsDeleted = true;
             entity.CreatedAt = DateTime.Now;
