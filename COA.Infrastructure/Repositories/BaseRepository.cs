@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Repositories
@@ -73,18 +72,6 @@ namespace COA.Infrastructure.Repositories
         {
             var request = _entity.Any(x => x.Id == id && x.IsDeleted == false);
             return request;
-        }
-        public async Task<int> CountAsync()
-        {
-            return await _entity.CountAsync();
-        }
-        public async Task<IEnumerable<T>> GetPageAsync(Expression<Func<T, object>> order, int limit, int page)
-        {
-            return await _entity.Where(x => !x.IsDeleted)
-                 .OrderBy(order)
-                 .Skip((page - 1) * limit)
-                 .Take(limit)
-                 .ToListAsync();
         }
     }
 }

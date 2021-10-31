@@ -1,22 +1,15 @@
 using COA.Core.Interfaces;
 using COA.Core.Services;
-using COA.Domain;
 using COA.Domain.Profiles;
 using COA.Infrastructure.Data;
+using COA.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace COA_Challenge
 {
@@ -45,8 +38,8 @@ namespace COA_Challenge
             services.AddAutoMapper(typeof(UserProfile));
 
             // Add DependenyInjections
-
-            services.AddScoped<IUsersServices, UsersServices>();
+            services.AddTransient<IUsersServices, UsersServices>();
+            services.AddScoped<UOW>();
 
             // Add Controllers
             services.AddControllers();

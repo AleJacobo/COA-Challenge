@@ -1,10 +1,5 @@
 ﻿using COA.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Data
 {
@@ -19,7 +14,7 @@ namespace COA.Infrastructure.Data
             builder.Entity<User>(entity => { entity.HasIndex(e => e.Email).IsUnique(); });
             builder.Seed();
         }
-        public DbSet<User> Users { get; set; }  
-        
+        public DbSet<User> Users { get; set; }
+
     }
 }

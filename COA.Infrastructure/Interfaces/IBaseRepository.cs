@@ -2,9 +2,7 @@
 using COA.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Repositories.Interfaces
@@ -17,8 +15,5 @@ namespace COA.Infrastructure.Repositories.Interfaces
         Task<Result> Delete(int id);
         Task<Result> Update(T entity);
         bool EntityExists(int id);
-        Task<IEnumerable<T>> GetPageAsync(Expression<Func<T, object>> order, int limit, int page);
-        Task<int> CountAsync();
-
     }
 }

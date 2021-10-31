@@ -16,4 +16,9 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\COA.Domain\COA.Domain.csproj" />
+    <ProjectReference Include="..\COA.Infrastructure\COA.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

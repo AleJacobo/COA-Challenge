@@ -1,10 +1,6 @@
 ﻿using COA.Domain;
 using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Repositories
@@ -39,7 +35,7 @@ namespace COA.Infrastructure.Repositories
             {
                 _context.Dispose();
             }
-        } 
+        }
         #endregion
     }
 }
