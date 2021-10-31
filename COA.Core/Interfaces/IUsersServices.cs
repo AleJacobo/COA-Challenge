@@ -10,5 +10,6 @@ namespace COA.Core.Interfaces
         Task<IEnumerable<UserDTO>> GetAll();
         Task<UserDTO> GetById(int id);
         Task<Result> Insert(UserInsertDTO userInsertDTO);
+        Task<Result> Update(UserUpdateDTO userUpdateDTO,int id);
     }
 }

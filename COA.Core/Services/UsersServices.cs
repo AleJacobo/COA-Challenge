@@ -62,6 +62,33 @@ namespace COA.Core.Services
                 var request = _mapper.Map<UserInsertDTO, User>(userInsertDTO);
                 var response= await _uow.UsersRepository.Insert(request);
 
+                await _uow.SaveChangesAsync();
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new Result().Fail(e.Message);
+            }
+
+        }
+        public async Task<Result> Update(UserUpdateDTO userUpdateDTO, int id)
+        {
+            try
+            {
+                if (_uow.UsersRepository.EntityExists(id) == false)
+                    return new Result().Fail($"Este usuario no se encuentra registrado");
+
+                var userDb = await _uow.UsersRepository.GetById(id);
+
+                if (userUpdateDTO.FirstName != null) { userDb.FirstName = userUpdateDTO.FirstName; };
+                if (userUpdateDTO.LastName != null) { userDb.LastName = userUpdateDTO.LastName; };
+                if (userUpdateDTO.Phone != null) { if(userUpdateDTO.Phone!= userDb.Phone) userDb.Phone = (int)userUpdateDTO.Phone; };
+
+                var response = await _uow.UsersRepository.Update(userDb);
+
+                await _uow.SaveChangesAsync();  
+
                 return response;
             }
             catch (Exception e)

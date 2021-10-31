@@ -60,16 +60,16 @@ namespace COA_Challenge.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Result>> Insert([FromForm]UserInsertDTO userInsertDTO)
+        public async Task<ActionResult<Result>> Insert([FromForm] UserInsertDTO userInsertDTO)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if(!ModelState.IsValid)
                     return StatusCode(StatusCodes.Status406NotAcceptable,
-                        "Los parametros ingresados no son correctos, intente de nuevo");
+                        "Los datos ingresados no son correctos");
 
                 var request = await _usersServices.Insert(userInsertDTO);
-                
+
                 if (request.HasErrors == true)
                     return BadRequest(request.Messages);
 
@@ -81,6 +81,29 @@ namespace COA_Challenge.Controllers
                     "No se ha podido ejecutar la operacion.");
             }
 
+        }
+
+        [HttpPost("{id:int}")]
+        public async Task<ActionResult<Result>> Update([FromForm] UserUpdateDTO userUpdateDTO, int id)
+        {
+            try
+            {
+                if(!ModelState.IsValid)
+                    return StatusCode(StatusCodes.Status406NotAcceptable,
+                        "Los datos ingresados no son correctos");
+
+                var request = await _usersServices.Update(userUpdateDTO,id);
+
+                if (request.HasErrors == true)
+                    return BadRequest(request.Messages);
+
+                return Ok(request);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "No se ha podido ejecutar la operacion.");
+            }
         }
     }
 }
