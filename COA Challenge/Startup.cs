@@ -1,3 +1,7 @@
+using COA.Core.Interfaces;
+using COA.Core.Services;
+using COA.Domain;
+using COA.Domain.Profiles;
 using COA.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +39,14 @@ namespace COA_Challenge
                 options.UseInternalServiceProvider(services);
                 options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnectionString"));
             });
+
+            // AddAutoMapper
+
+            services.AddAutoMapper(typeof(UserProfile));
+
+            // Add DependenyInjections
+
+            services.AddScoped<IUsersServices, UsersServices>();
 
             // Add Controllers
             services.AddControllers();
