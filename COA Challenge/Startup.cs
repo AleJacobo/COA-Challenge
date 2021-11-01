@@ -1,3 +1,4 @@
+using AutoMapper;
 using COA.Core.Interfaces;
 using COA.Core.Services;
 using COA.Domain.Profiles;
@@ -5,6 +6,7 @@ using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +27,8 @@ namespace COA_Challenge
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Json Options
+
             // Add SQL Server and Contexts on build.
             services.AddEntityFrameworkSqlServer();
             services.AddDbContextPool<AppDbContext>((services, options) =>
@@ -33,9 +37,13 @@ namespace COA_Challenge
                 options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnectionString"));
             });
 
-            // AddAutoMapper
+            // AddAutoMapper and Configurations
 
-            services.AddAutoMapper(typeof(UserProfile));
+            var mappingConfig = new MapperConfiguration(mc => {
+                mc.AddProfile(new UserProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             // Add DependenyInjections
             services.AddTransient<IUsersServices, UsersServices>();

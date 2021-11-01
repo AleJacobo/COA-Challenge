@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using COA.Core.Interfaces;
 using COA.Domain;
+using COA.Domain.Common;
 using COA.Domain.DTOs.UserDTOs;
 using COA.Infrastructure.Repositories;
 using System;
@@ -19,6 +20,7 @@ namespace COA.Core.Services
             _uow = uow;
             _mapper = mapper;
         }
+
         #endregion
         public async Task<IEnumerable<UserDTO>> GetAll()
         {
@@ -52,6 +54,67 @@ namespace COA.Core.Services
             catch (Exception)
             {
                 throw;
+            }
+        }
+        public async Task<Result> Insert(UserInsertDTO userInsertDTO)
+        {
+            try
+            {
+                var request = _mapper.Map<UserInsertDTO, User>(userInsertDTO);
+                var response= await _uow.UsersRepository.Insert(request);
+
+                await _uow.SaveChangesAsync();
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new Result().Fail(e.Message);
+            }
+
+        }
+        public async Task<Result> Update(UserUpdateDTO userUpdateDTO, int id)
+        {
+            try
+            {
+                if (_uow.UsersRepository.EntityExists(id) == false)
+                    return null;
+
+                var userDb = await _uow.UsersRepository.GetById(id);
+
+                if (userUpdateDTO.FirstName != null) { userDb.FirstName = userUpdateDTO.FirstName; };
+                if (userUpdateDTO.LastName != null) { userDb.LastName = userUpdateDTO.LastName; };
+                if (userUpdateDTO.Phone != null) { if(userUpdateDTO.Phone!= userDb.Phone) userDb.Phone = (int)userUpdateDTO.Phone; };
+
+                var response = await _uow.UsersRepository.Update(userDb);
+
+                await _uow.SaveChangesAsync();  
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new Result().Fail(e.Message);
+            }
+
+        }
+        public async Task<Result> Delete(int id)
+        {
+            try
+            {
+                if (_uow.UsersRepository.EntityExists(id) == false)
+                    return null;
+
+                var response = await _uow.UsersRepository.Delete(id);
+
+                await _uow.SaveChangesAsync();
+
+                return response;
+
+            }
+            catch (Exception e)
+            {
+                return new Result().Fail(e.Message);
             }
         }
     }
