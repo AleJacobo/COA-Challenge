@@ -14,7 +14,7 @@ namespace COA_Challenge.Controllers
     public class UsersController : ControllerBase
     {
         #region Fields and Constructor
-        private readonly IUsersServices _usersServices;
+        private readonly IUsersServices<> _usersServices;
         public UsersController(IUsersServices usersServices)
         {
             _usersServices = usersServices;
@@ -41,23 +41,23 @@ namespace COA_Challenge.Controllers
 
             if (user == null)
             {
-                response.Fail("No se ha encontrado el usuario");
+                await response.Fail("No se ha encontrado el usuario");
                 return BadRequest(response);
             }
-            response.Success(user);
 
+            response.Success(user);
             return Ok(user);
         }
 
         [HttpPut]
         public async Task<IActionResult> Insert([FromForm] UserInsertDTO userInsertDTO)
         {
+            var response = new NCResult();
 
             if (!ModelState.IsValid)
             {
-                var badResult = new Result<Exception>();
-                badResult.Fail("No se encontro el usuario");
-                return BadRequest(badResult);
+                await response.Fail("Datos incorrectos");
+                return BadRequest(response.Messages);
             }
 
             var insert = await _usersServices.Insert(userInsertDTO);
@@ -65,12 +65,14 @@ namespace COA_Challenge.Controllers
             if (insert.HasErrors == true)
                 return BadRequest(insert.Messages);
 
-            return Ok(insert);
+            return Ok(insert.Messages);
         }
 
         [HttpPost("{id}")]
-        public async Task<ActionResult<Result>> Update([FromForm] UserUpdateDTO userUpdateDTO, int id)
+        public async Task<IActionResult> Update([FromForm] UserUpdateDTO userUpdateDTO, int id)
         {
+            var response = new COA.Domain.Common.NCResult();
+
             if (!ModelState.IsValid)
                 return BadRequest("Los datos ingresados no son validos");
 

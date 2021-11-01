@@ -43,20 +43,20 @@ namespace COA.Core.Services
             return response;
         }
 
-        public async Task<Result<T>> Insert(UserInsertDTO userInsertDTO)
+        public async Task<NCResult> Insert(UserInsertDTO userInsertDTO)
         {
             var request = _mapper.Map<UserInsertDTO, User>(userInsertDTO);
             await _uow.UsersRepository.Insert(request);
             await _uow.SaveChangesAsync();
 
-            var response = new Result<T>();
+            var response = new NCResult();
             await response.Success("Creado correctamente");
 
             return response;
         }
-        public async Task<Result<T>> Update(UserUpdateDTO userUpdateDTO, int id)
+        public async Task<NCResult> Update(UserUpdateDTO userUpdateDTO, int id)
         {
-            var response = new Result<T>();
+            var response = new NCResult();
 
             if (_uow.UsersRepository.EntityExists(id) == false)
             {
@@ -75,26 +75,21 @@ namespace COA.Core.Services
 
             return response;
         }
-    }
-
-    public async Task<Result> Delete(int id)
-    {
-        try
+        public async Task<NCResult> Delete(int id)
         {
+            var response = new NCResult();
+
             if (_uow.UsersRepository.EntityExists(id) == false)
-                return new Result().Fail("No se ha encontrado un usuario con el Id especificado");
+            {
+                await response.Fail("No se ha podido encontrar el usuario");
+                return response;
+            }
 
-            var response = await _uow.UsersRepository.Delete(id);
-
+            await _uow.UsersRepository.Delete(id);
             await _uow.SaveChangesAsync();
 
+            await response.Success("Se ha modificado correctamente el usuario");
             return response;
-
-        }
-        catch (Exception e)
-        {
-            return new Result().Fail(e.Message);
         }
     }
-}
 }

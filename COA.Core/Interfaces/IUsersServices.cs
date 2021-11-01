@@ -9,8 +9,8 @@ namespace COA.Core.Interfaces
     {
         Task<IEnumerable<UserDTO>> GetAll();
         Task<UserDTO> GetById(int id);
-        Task<Result<T>> Insert(UserInsertDTO userInsertDTO);
-        Task<Result<UserDTO>> Update(UserUpdateDTO userUpdateDTO, int id);
-        Task<Result<UserDTO>> Delete(int id);
+        Task<NCResult> Insert(UserInsertDTO userInsertDTO);
+        Task<NCResult> Update(UserUpdateDTO userUpdateDTO, int id);
+        Task<NCResult> Delete(int id);
     }
 }
