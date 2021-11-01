@@ -6,7 +6,6 @@ using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +38,8 @@ namespace COA_Challenge
 
             // AddAutoMapper and Configurations
 
-            var mappingConfig = new MapperConfiguration(mc => {
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
                 mc.AddProfile(new UserProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();

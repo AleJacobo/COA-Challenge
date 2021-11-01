@@ -11,7 +11,7 @@ namespace COA.Domain.Profiles
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<User, UserInsertDTO>().ReverseMap();
             CreateMap<User, UserUpdateDTO>().ReverseMap();
-                
+
         }
     }
 }

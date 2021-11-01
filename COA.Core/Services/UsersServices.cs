@@ -61,7 +61,7 @@ namespace COA.Core.Services
             try
             {
                 var request = _mapper.Map<UserInsertDTO, User>(userInsertDTO);
-                var response= await _uow.UsersRepository.Insert(request);
+                var response = await _uow.UsersRepository.Insert(request);
 
                 await _uow.SaveChangesAsync();
 
@@ -84,11 +84,11 @@ namespace COA.Core.Services
 
                 if (userUpdateDTO.FirstName != null) { userDb.FirstName = userUpdateDTO.FirstName; };
                 if (userUpdateDTO.LastName != null) { userDb.LastName = userUpdateDTO.LastName; };
-                if (userUpdateDTO.Phone != null) { if(userUpdateDTO.Phone!= userDb.Phone) userDb.Phone = (int)userUpdateDTO.Phone; };
+                if (userUpdateDTO.Phone != null) { if (userUpdateDTO.Phone != userDb.Phone) userDb.Phone = (int)userUpdateDTO.Phone; };
 
                 var response = await _uow.UsersRepository.Update(userDb);
 
-                await _uow.SaveChangesAsync();  
+                await _uow.SaveChangesAsync();
 
                 return response;
             }
