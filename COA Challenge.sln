@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COA.API", "COA Challenge\COA.API.csproj", "{97C9FA1A-E84F-4ADC-9079-783879363874}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COA.API", "COA Challenge\COA.API.csproj", "{97C9FA1A-E84F-4ADC-9079-783879363874}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COA.Core", "COA.Core\COA.Core.csproj", "{CD617E5E-E1DD-4E2F-908D-894A0902D3FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COA.Core", "COA.Core\COA.Core.csproj", "{CD617E5E-E1DD-4E2F-908D-894A0902D3FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COA.Infrastructure", "COA.Infrastructure\COA.Infrastructure.csproj", "{A808892E-42A9-40E6-B8AB-19DA4E1B7B96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COA.Infrastructure", "COA.Infrastructure\COA.Infrastructure.csproj", "{A808892E-42A9-40E6-B8AB-19DA4E1B7B96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COA.Domain", "COA.Domain\COA.Domain.csproj", "{DFCD3F3E-A96D-4DBE-BEA9-899B7DC77CCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COA.Domain", "COA.Domain\COA.Domain.csproj", "{DFCD3F3E-A96D-4DBE-BEA9-899B7DC77CCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COA.Tests", "COA.Tests\COA.Tests.csproj", "{DAA51270-4BA3-475F-B77F-470A62D593EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DFCD3F3E-A96D-4DBE-BEA9-899B7DC77CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFCD3F3E-A96D-4DBE-BEA9-899B7DC77CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFCD3F3E-A96D-4DBE-BEA9-899B7DC77CCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAA51270-4BA3-475F-B77F-470A62D593EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAA51270-4BA3-475F-B77F-470A62D593EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAA51270-4BA3-475F-B77F-470A62D593EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAA51270-4BA3-475F-B77F-470A62D593EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
