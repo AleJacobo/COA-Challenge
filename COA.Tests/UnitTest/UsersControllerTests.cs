@@ -38,7 +38,7 @@ namespace COA.Tests.Tests
             _context = GetTestContext(Guid.NewGuid().ToString());
             _uow = new UOW(_context);
             _mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
-            _usersServices = new UsersServices((UOW)_uow, _mapper);
+            _usersServices = new UsersServices(_uow, _mapper);
         }
 
         [Fact]

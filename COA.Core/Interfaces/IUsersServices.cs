@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace COA.Core.Interfaces
 {
-    public interface IUsersServices
+    public interface IUsersServices<T> where T : class
     {
         Task<IEnumerable<UserDTO>> GetAll();
         Task<UserDTO> GetById(int id);
-        Task<Result> Insert(UserInsertDTO userInsertDTO);
-        Task<Result> Update(UserUpdateDTO userUpdateDTO, int id);
-        Task<Result> Delete(int id);
+        Task<Result<T>> Insert(UserInsertDTO userInsertDTO);
+        Task<Result<UserDTO>> Update(UserUpdateDTO userUpdateDTO, int id);
+        Task<Result<UserDTO>> Delete(int id);
     }
 }

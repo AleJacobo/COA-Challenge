@@ -9,9 +9,9 @@ namespace COA.Infrastructure.Repositories.Interfaces
     {
         Task<IEnumerable<T>> GetAll();
         Task<T> GetById(int id);
-        Task<Result> Insert(T entity);
-        Task<Result> Delete(int id);
-        Task<Result> Update(T entity);
+        Task Insert(T entity);
+        Task Delete(int id);
+        Task Update(T entity);
         bool EntityExists(int id);
     }
 }
