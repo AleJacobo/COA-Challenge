@@ -64,7 +64,7 @@ namespace COA_Challenge.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                     return StatusCode(StatusCodes.Status406NotAcceptable,
                         "Los datos ingresados no son correctos");
 
@@ -88,13 +88,13 @@ namespace COA_Challenge.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                     return StatusCode(StatusCodes.Status406NotAcceptable,
                         "Los datos ingresados no son correctos");
 
-                var request = await _usersServices.Update(userUpdateDTO,id);
+                var request = await _usersServices.Update(userUpdateDTO, id);
 
-                if (request==null || request.HasErrors==true)
+                if (request == null || request.HasErrors == true)
                     return BadRequest(request.Messages);
 
                 return Ok(request);

@@ -1,8 +1,6 @@
 ﻿using COA.Domain.Common;
 using COA.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Repositories.Interfaces

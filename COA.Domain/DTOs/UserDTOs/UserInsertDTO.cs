@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace COA.Domain.DTOs.UserDTOs
 {
@@ -29,7 +24,7 @@ namespace COA.Domain.DTOs.UserDTOs
         [StringLength(50, ErrorMessage = "Debe contener minimo 15 caracteres", MinimumLength = 15)]
         [RegularExpression("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$", ErrorMessage = "Debe ser un email valido")]
         [Column(TypeName = "VARCHAR (50)")]
-        [EmailAddress] 
+        [EmailAddress]
         #endregion
         public string Email { get; set; }
 

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace COA.Infrastructure.Repositories
@@ -28,7 +27,7 @@ namespace COA.Infrastructure.Repositories
         {
             var request = await _entity.Where(x => x.IsDeleted == false && x.Id == id)
                 .FirstOrDefaultAsync();
-                
+
             return request;
         }
         public async Task<IEnumerable<T>> GetAll()
