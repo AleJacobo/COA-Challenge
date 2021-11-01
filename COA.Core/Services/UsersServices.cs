@@ -28,10 +28,11 @@ namespace COA.Core.Services
             {
                 var request = await _uow.UsersRepository.GetAll();
 
-                if (request == null)
+                var response = _mapper.Map<List<UserDTO>>(request);
+                
+                if (response.Count==0)
                     return null;
 
-                var response = _mapper.Map<IEnumerable<UserDTO>>(request);
                 return response;
             }
             catch (Exception)
@@ -103,7 +104,7 @@ namespace COA.Core.Services
             try
             {
                 if (_uow.UsersRepository.EntityExists(id) == false)
-                    return null;
+                    return new Result().Fail("No se ha encontrado un usuario con el Id especificado");
 
                 var response = await _uow.UsersRepository.Delete(id);
 

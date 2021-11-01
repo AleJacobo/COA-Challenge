@@ -29,7 +29,7 @@ namespace COA_Challenge.Controllers
                 var request = await _usersServices.GetAll();
 
                 if (request == null)
-                    return NoContent();
+                    return BadRequest(new Result().Fail("No se ha podido encontrar entradas en la Base de Datos"));
 
                 return Ok(request);
             }
@@ -48,7 +48,7 @@ namespace COA_Challenge.Controllers
                 var request = await _usersServices.GetById(id);
 
                 if (request == null)
-                    return NoContent();
+                    return BadRequest(new Result().Fail("No se ha encontrado un usuario con este Id"));
 
                 return Ok(request);
             }
@@ -65,8 +65,7 @@ namespace COA_Challenge.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return StatusCode(StatusCodes.Status406NotAcceptable,
-                        "Los datos ingresados no son correctos");
+                    return BadRequest(new Result().Fail("Datos incorrectos"));
 
                 var request = await _usersServices.Insert(userInsertDTO);
 
@@ -89,8 +88,7 @@ namespace COA_Challenge.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return StatusCode(StatusCodes.Status406NotAcceptable,
-                        "Los datos ingresados no son correctos");
+                    return BadRequest("Los datos ingresados no son validos");
 
                 var request = await _usersServices.Update(userUpdateDTO, id);
 
@@ -112,6 +110,7 @@ namespace COA_Challenge.Controllers
             try
             {
                 var request = await _usersServices.Delete(id);
+
                 if (request.HasErrors == true)
                     return BadRequest(request.Messages);
 
