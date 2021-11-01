@@ -1,5 +1,4 @@
-﻿using COA.Domain.Common;
-using COA.Domain.Entities;
+﻿using COA.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

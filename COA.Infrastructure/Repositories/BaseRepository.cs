@@ -1,6 +1,4 @@
-﻿using COA.Domain.Common;
-using COA.Domain.DTOs.UserDTOs;
-using COA.Domain.Entities;
+﻿using COA.Domain.Entities;
 using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +38,7 @@ namespace COA.Infrastructure.Repositories
         {
             entity.CreatedAt = DateTime.Now;
             entity.IsDeleted = false;
-            
+
             await _entity.AddAsync(entity);
         }
         public async Task Update(T entity)

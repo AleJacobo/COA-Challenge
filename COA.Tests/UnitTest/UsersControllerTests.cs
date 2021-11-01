@@ -4,7 +4,6 @@ using COA.Core.Services;
 using COA.Domain;
 using COA.Domain.Common;
 using COA.Domain.DTOs.UserDTOs;
-using COA.Domain.Profiles;
 using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories;
 using COA.Infrastructure.Repositories.Interfaces;
@@ -14,9 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -196,7 +192,7 @@ namespace COA.Tests.Tests
                 };
 
                 //Act
-                var request = await controller.Update(updateUser,1);
+                var request = await controller.Update(updateUser, 1);
                 var expected = (ObjectResult)request.Result;
 
                 //Assert
@@ -297,7 +293,7 @@ namespace COA.Tests.Tests
         private void SeedEmpty(AppDbContext _context)
         {
             _context.SaveChangesAsync();
-        } 
+        }
         #endregion
     }
 }

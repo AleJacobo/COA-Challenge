@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using COA.Core.Interfaces;
 using COA.Domain;
-using COA.Domain.Common;
 using COA.Domain.DTOs.UserDTOs;
-using COA.Infrastructure.Repositories;
+using COA.Domain.Exceptions;
 using COA.Infrastructure.Repositories.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace COA.Core.Services
 {
-    public class UsersServices<T> where T : class, IUsersServices<T>
+    public class UsersServices : IUsersServices
     {
         #region Fields and Constructor
         private readonly IUnitOfWork _uow;
@@ -21,7 +19,6 @@ namespace COA.Core.Services
             _uow = uow;
             _mapper = mapper;
         }
-
         #endregion
         public async Task<IEnumerable<UserDTO>> GetAll()
         {
@@ -35,7 +32,7 @@ namespace COA.Core.Services
         public async Task<UserDTO> GetById(int id)
         {
             if (_uow.UsersRepository.EntityExists(id) == false)
-                return null;
+                throw new COAException("No se ha encontrado el usuario");
 
             var request = await _uow.UsersRepository.GetById(id);
             var response = _mapper.Map<User, UserDTO>(request);
@@ -43,26 +40,17 @@ namespace COA.Core.Services
             return response;
         }
 
-        public async Task<NCResult> Insert(UserInsertDTO userInsertDTO)
+        public async Task Insert(UserInsertDTO userInsertDTO)
         {
             var request = _mapper.Map<UserInsertDTO, User>(userInsertDTO);
             await _uow.UsersRepository.Insert(request);
             await _uow.SaveChangesAsync();
-
-            var response = new NCResult();
-            await response.Success("Creado correctamente");
-
-            return response;
         }
-        public async Task<NCResult> Update(UserUpdateDTO userUpdateDTO, int id)
-        {
-            var response = new NCResult();
 
+        public async Task Update(UserUpdateDTO userUpdateDTO, int id)
+        {
             if (_uow.UsersRepository.EntityExists(id) == false)
-            {
-                await response.NotFound();
-                return response;
-            }
+                throw new COAException("No se ha encontrado el usuario a modificar");
 
             var userDb = await _uow.UsersRepository.GetById(id);
 
@@ -72,24 +60,16 @@ namespace COA.Core.Services
 
             await _uow.UsersRepository.Update(userDb);
             await _uow.SaveChangesAsync();
-
-            return response;
         }
-        public async Task<NCResult> Delete(int id)
-        {
-            var response = new NCResult();
 
+        public async Task Delete(int id)
+        {
             if (_uow.UsersRepository.EntityExists(id) == false)
-            {
-                await response.Fail("No se ha podido encontrar el usuario");
-                return response;
-            }
+                throw new COAException("No se ha encontrado el usuario a eliminar");
 
             await _uow.UsersRepository.Delete(id);
             await _uow.SaveChangesAsync();
-
-            await response.Success("Se ha modificado correctamente el usuario");
-            return response;
         }
+
     }
 }

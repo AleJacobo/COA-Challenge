@@ -1,17 +1,21 @@
 using AutoMapper;
 using COA.Core.Interfaces;
 using COA.Core.Services;
+using COA.Domain.Common;
+using COA.Domain.Exceptions;
 using COA.Domain.Profiles;
 using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories;
 using COA.Infrastructure.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 
@@ -49,7 +53,7 @@ namespace COA_Challenge
 
             // Add DependenyInjections
             services.AddTransient<IUsersServices, UsersServices>();
-            services.AddScoped<IUnitOfWork,UOW>();
+            services.AddScoped<IUnitOfWork, UOW>();
 
             // Add Controllers
             services.AddControllers();
@@ -86,9 +90,19 @@ namespace COA_Challenge
             {
                 error.Run(async context =>
                 {
+                    var response = new Result();
+                    var ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                    if (ex.GetType() == typeof(COAException))
+                    {
+                        await response.Fail(ex.Message);
+                    }
+                    else
+                    {
+                        await response.Fail("No se ha podido ejecutar la operacion");
+                    }
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "text/plain";
-                    await context.Response.BodyWriter.WriteAsync(Encoding.ASCII.GetBytes("No se ha podido ejecutar la operacion"));
+                    context.Response.ContentType = "application/json";
+                    await context.Response.BodyWriter.WriteAsync(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(response)));
                 });
             });
 
