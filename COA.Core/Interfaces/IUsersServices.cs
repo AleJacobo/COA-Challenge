@@ -1,5 +1,4 @@
-﻿using COA.Domain.Common;
-using COA.Domain.DTOs.UserDTOs;
+﻿using COA.Domain.DTOs.UserDTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,8 +8,8 @@ namespace COA.Core.Interfaces
     {
         Task<IEnumerable<UserDTO>> GetAll();
         Task<UserDTO> GetById(int id);
-        Task<Result> Insert(UserInsertDTO userInsertDTO);
-        Task<Result> Update(UserUpdateDTO userUpdateDTO, int id);
-        Task<Result> Delete(int id);
+        Task Insert(UserInsertDTO userInsertDTO);
+        Task Update(UserUpdateDTO userUpdateDTO, int id);
+        Task Delete(int id);
     }
 }

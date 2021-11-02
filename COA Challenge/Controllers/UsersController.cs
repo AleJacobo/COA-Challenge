@@ -1,9 +1,7 @@
 ﻿using COA.Core.Interfaces;
 using COA.Domain.Common;
 using COA.Domain.DTOs.UserDTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,105 +19,69 @@ namespace COA_Challenge.Controllers
         }
         #endregion
 
-        [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var request = await _usersServices.GetAll();
+            var users = await _usersServices.GetAll();
 
-                if (request == null)
-                    return BadRequest(new Result().Fail("No se ha podido encontrar entradas en la Base de Datos"));
+            var response = new Result<IEnumerable<UserDTO>>();
+            await response.Success(users);
 
-                return Ok(request);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "No se ha podido ejecutar la operacion.");
-            }
+            return Ok(response);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<UserDTO>> GetById(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var request = await _usersServices.GetById(id);
+            var user = await _usersServices.GetById(id);
 
-                if (request == null)
-                    return BadRequest(new Result().Fail("No se ha encontrado un usuario con este Id"));
+            var response = new Result<UserDTO>();
 
-                return Ok(request);
-            }
-            catch (Exception)
+            if (user == null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "No se ha podido ejecutar la operacion.");
+                await response.Fail("No se ha encontrado el usuario");
+                return BadRequest(response);
             }
+
+            await response.Success(user);
+            return Ok(user);
         }
 
         [HttpPut]
-        public async Task<ActionResult<Result>> Insert([FromForm] UserInsertDTO userInsertDTO)
+        public async Task<IActionResult> Insert([FromForm] UserInsertDTO userInsertDTO)
         {
-            try
+            var response = new Result();
+
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(new Result().Fail("Datos incorrectos"));
-
-                var request = await _usersServices.Insert(userInsertDTO);
-
-                if (request.HasErrors == true)
-                    return BadRequest(request.Messages);
-
-                return Ok(request);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "No se ha podido ejecutar la operacion.");
+                await response.Fail("Datos incorrectos");
+                return BadRequest(response);
             }
 
+            await _usersServices.Insert(userInsertDTO);
+            return Ok();
         }
 
-        [HttpPost("{id:int}")]
-        public async Task<ActionResult<Result>> Update([FromForm] UserUpdateDTO userUpdateDTO, int id)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Update([FromForm] UserUpdateDTO userUpdateDTO, int id)
         {
-            try
+            var response = new Result();
+
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                    return BadRequest("Los datos ingresados no son validos");
-
-                var request = await _usersServices.Update(userUpdateDTO, id);
-
-                if (request == null || request.HasErrors == true)
-                    return BadRequest(request.Messages);
-
-                return Ok(request);
+                await response.Fail("Los datos ingresados son incorrectos");
+                return BadRequest(response);
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "No se ha podido ejecutar la operacion.");
-            }
+
+            await _usersServices.Update(userUpdateDTO, id);
+            return Ok();
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult<Result>> Delete(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var request = await _usersServices.Delete(id);
-
-                if (request.HasErrors == true)
-                    return BadRequest(request.Messages);
-
-                return Ok(request);
-            }
-            catch (Exception e)
-            {
-                return new Result().Fail(e.Message);
-            }
+            await _usersServices.Delete(id);
+            return Ok();
         }
     }
 }

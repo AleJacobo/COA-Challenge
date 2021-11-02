@@ -4,7 +4,7 @@ using COA.Core.Services;
 using COA.Domain;
 using COA.Domain.Common;
 using COA.Domain.DTOs.UserDTOs;
-using COA.Domain.Profiles;
+using COA.Domain.Exceptions;
 using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories;
 using COA.Infrastructure.Repositories.Interfaces;
@@ -14,9 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,7 +23,6 @@ namespace COA.Tests.Tests
     {
         #region Fields
         private AppDbContext _context;
-        private Mock<IUsersServices> _userServicesMock = new();
         private IUsersServices _usersServices;
         private IUnitOfWork _uow;
         private IMapper _mapper;
@@ -38,11 +34,11 @@ namespace COA.Tests.Tests
             _context = GetTestContext(Guid.NewGuid().ToString());
             _uow = new UOW(_context);
             _mapper = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile())).CreateMapper();
-            _usersServices = new UsersServices((UOW)_uow, _mapper);
+            _usersServices = new UsersServices(_uow, _mapper);
         }
 
         [Fact]
-        public async Task GetAllUsers_ShouldReturn_ListofUserDTO_Ok()
+        public async Task GetAllUsers_ShouldReturn_Result_ListOfUsers_Ok()
         {
             using (_context)
             {
@@ -52,56 +48,32 @@ namespace COA.Tests.Tests
                 var controller = new UsersController(_usersServices);
 
                 //Act
-                var request = await controller.GetAll();
-                var expected = (ObjectResult)request.Result;
+                var users = await controller.GetAll();
+                var result = users as OkObjectResult;
 
                 //Assert
-                Assert.Equal(200, expected.StatusCode);
-                Assert.IsType<List<UserDTO>>(expected.Value);
+                Assert.NotNull(result);
+                Assert.Equal(200, result.StatusCode);
+                Assert.IsType<Result<IEnumerable<UserDTO>>>(result.Value);
             }
         }
 
         [Fact]
-        public async Task GetAllUsers_ShouldReturn_BadRequest()
+        public async Task GetAllUsers_ShouldThrowException()
         {
             using (_context)
             {
                 //Arrange
                 Init();
                 var controller = new UsersController(_usersServices);
-                SeedEmpty(_context);
 
-                //Act
-                var request = await controller.GetAll();
-                var expected = (ObjectResult)request.Result;
-
-                //Assert
-                Assert.Equal(400, expected.StatusCode);
+                //Act and Assert
+                await Assert.ThrowsAsync<COAException>(async () => await controller.GetAll());
             }
         }
 
         [Fact]
-        public async Task GetById_ShouldReturn_User_Ok()
-        {
-            using (_context)
-            {
-                //Arrange
-                Init();
-                SeedUsers(_context);
-                var controller = new UsersController(_usersServices);
-
-                //Act
-                var request = await controller.GetById(1);
-                var expected = (ObjectResult)request.Result;
-
-                //Assert
-                Assert.Equal(200, expected.StatusCode);
-                Assert.IsType<UserDTO>(expected.Value);
-            }
-        }
-
-        [Fact]
-        public async Task GetById_ShouldReturn_BadRequest()
+        public async Task GetById_ShouldReturn_Result_User_Ok()
         {
             using (_context)
             {
@@ -111,16 +83,33 @@ namespace COA.Tests.Tests
                 var controller = new UsersController(_usersServices);
 
                 //Act
-                var request = await controller.GetById(12);
-                var expected = (ObjectResult)request.Result;
+                var user = await controller.GetById(1);
+                var result = user as OkObjectResult;
 
                 //Assert
-                Assert.Equal(400, expected.StatusCode);
+                Assert.NotNull(result);
+                Assert.Equal(200, result.StatusCode);
+                Assert.IsType<UserDTO>(result.Value);
             }
         }
 
         [Fact]
-        public async Task Insert_ShoudReturn_ResultOk()
+        public async Task GetById_EntityDoesntExixts_ShouldThrowException()
+        {
+            using (_context)
+            {
+                //Arrange
+                Init();
+                SeedUsers(_context);
+                var controller = new UsersController(_usersServices);
+
+                //Act & Assert
+                await Assert.ThrowsAsync<COAException>(async () => await controller.GetById(9999999));
+            }
+        }
+
+        [Fact]
+        public async Task Insert_ShoudReturn_Ok()
         {
             using (_context)
             {
@@ -138,17 +127,17 @@ namespace COA.Tests.Tests
                 };
 
                 //Act
-                var request = await controller.Insert(newUser);
-                var expected = (ObjectResult)request.Result;
+                var insert = await controller.Insert(newUser);
+                var result = insert as OkResult;
 
                 //Assert
-                Assert.Equal(200, expected.StatusCode);
-                Assert.IsType<Result>(expected.Value);
+                Assert.NotNull(result);
+                Assert.Equal(200, result.StatusCode);
             }
         }
 
         [Fact]
-        public async Task Insert_BadParameter_ShoudReturn_BadResult()
+        public async Task Insert_BadParameter_ShouldThrowBadRequest()
         {
             using (_context)
             {
@@ -167,17 +156,18 @@ namespace COA.Tests.Tests
                 controller.ModelState.AddModelError("Email", "The Email field is not a valid e-mail address.");
 
                 //Act
-                var request = await controller.Insert(newUser);
-                var expected = (ObjectResult)request.Result;
+
+                var insert = await controller.Insert(newUser);
+                var result = insert as BadRequestObjectResult;
 
                 //Assert
-                Assert.Equal(400, expected.StatusCode);
-                Assert.IsType<Result>(expected.Value);
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
             }
         }
 
         [Fact]
-        public async Task Update_ShouldReturn_ResultOk()
+        public async Task Update_ShouldReturn_Ok()
         {
             using (_context)
             {
@@ -196,17 +186,17 @@ namespace COA.Tests.Tests
                 };
 
                 //Act
-                var request = await controller.Update(updateUser,1);
-                var expected = (ObjectResult)request.Result;
+                var update = await controller.Update(updateUser, 1);
+                var result = update as OkResult;
 
                 //Assert
-                Assert.Equal(200, expected.StatusCode);
-                Assert.IsType<Result>(expected.Value);
+                Assert.NotNull(result);
+                Assert.Equal(200, result.StatusCode);
             }
         }
 
         [Fact]
-        public async Task Update_BadParameter_ShouldReturn_ResultBadRequest()
+        public async Task Update_BadParameter_ShouldReturn_BadRequest()
         {
             using (_context)
             {
@@ -226,16 +216,17 @@ namespace COA.Tests.Tests
                 controller.ModelState.AddModelError("Email", "The Email field is not a valid e-mail address.");
 
                 //Act
-                var request = await controller.Update(updateUser, 1);
-                var expected = (ObjectResult)request.Result;
+                var update = await controller.Update(updateUser,1);
+                var result = update as BadRequestObjectResult;
 
                 //Assert
-                Assert.Equal(400, expected.StatusCode);
+                Assert.NotNull(result);
+                Assert.Equal(400, result.StatusCode);
             }
         }
 
         [Fact]
-        public async Task Delete_ShouldReturn_ResultOk()
+        public async Task Delete_ShouldReturn_Ok()
         {
             using (_context)
             {
@@ -246,17 +237,17 @@ namespace COA.Tests.Tests
                 var controller = new UsersController(_usersServices);
 
                 //Act
-                var request = await controller.Delete(1);
-                var expected = (ObjectResult)request.Result;
+                var delete = await controller.Delete(1);
+                var result = delete as OkResult;
 
                 //Assert
-                Assert.Equal(200, expected.StatusCode);
-                Assert.IsType<Result>(expected.Value);
+                Assert.NotNull(result);
+                Assert.Equal(200, result.StatusCode);
             }
         }
 
         [Fact]
-        public async Task Delete_EntityDoesntExists_ShouldReturn_ResultBadRequest()
+        public async Task Delete_EntityDoesntExists_ShouldThrowException()
         {
             using (_context)
             {
@@ -265,12 +256,8 @@ namespace COA.Tests.Tests
                 SeedUsers(_context);
                 var controller = new UsersController(_usersServices);
 
-                //Act
-                var request = await controller.Delete(15);
-                var expected = (ObjectResult)request.Result;
-
-                //Assert
-                Assert.Equal(400, expected.StatusCode);
+                //Act and Assert
+                await Assert.ThrowsAsync<COAException>(async () => await controller.Delete(9999999));
             }
         }
 
@@ -297,7 +284,7 @@ namespace COA.Tests.Tests
         private void SeedEmpty(AppDbContext _context)
         {
             _context.SaveChangesAsync();
-        } 
+        }
         #endregion
     }
 }

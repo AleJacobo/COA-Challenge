@@ -14,6 +14,7 @@ namespace COA.Infrastructure.Data
             builder.Entity<User>(entity => { entity.HasIndex(e => e.Email).IsUnique(); });
             builder.Seed();
         }
+
         public DbSet<User> Users { get; set; }
 
     }
