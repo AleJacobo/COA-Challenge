@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COA.Infrastructure", "COA.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COA.Domain", "COA.Domain\COA.Domain.csproj", "{DFCD3F3E-A96D-4DBE-BEA9-899B7DC77CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COA.Tests", "COA.Tests\COA.Tests.csproj", "{DAA51270-4BA3-475F-B77F-470A62D593EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COA.Tests", "COA.Tests\COA.Tests.csproj", "{DAA51270-4BA3-475F-B77F-470A62D593EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
