@@ -16,8 +16,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace COA_Challenge
 {
@@ -65,14 +70,23 @@ namespace COA_Challenge
                 {
                     Title = "COA Challenge",
                     Version = "v1",
-                    Description = $"Challenge para COA, creado con tecnologia NET Core 5.0 \n" +
-                    $"-Se siguio un patron por capas, con un patron de Generic Repository y Unit of Work \n" +
-                    $"-Utilizo un modelado de base de datos utilizando EF Core y un patron CodeFirst" +
-                    $"-Se agrega tambien inyeccion de dependendias para darle mas claridad de responsabilidad a cada clase \n" +
-                    $"-Se utiliza la libreria de Automapper para trabajar los DTOs de manera automatizada." +
-                    $"-"
-
+                    Description = $"Challenge para COA, creado con tecnologia NET Core 5.0 \n " +
+                    $"\n -Se siguio un patron por capas, con un patron de Generic Repository y Unit of Work \n" +
+                    $"\n -Utilizo un modelado de base de datos utilizando EF Core y un patron CodeFirst \n " +
+                    $"\n -Se agrega tambien inyeccion de dependendias para darle mas claridad de responsabilidad a cada clase \n" +
+                    $"\n -Se utiliza la libreria de Automapper para trabajar los DTOs de manera automatizada \n" +
+                    $"\n -Se crea e implementa un middleware de Exception Handler, para poder liberar performance en las llamadas \n" +
+                    $"\n -Se anexa tambien un UnitTest, con tecnologia xUnit para verificar endpoints",
+                    Contact = new OpenApiContact()
+                    {
+                        Name = "Alejandro Jacobo Guerrero",
+                        Url = new Uri("https://github.com/AleJacobo"),
+                    }
                 });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
