@@ -26,6 +26,9 @@ namespace COA.Core.Services
 
             var response = _mapper.Map<List<UserDTO>>(request);
 
+            if (response.Count == 0)
+                throw new COAException("No se encontraron registros en la Base de Datos");
+
             return response;
         }
 

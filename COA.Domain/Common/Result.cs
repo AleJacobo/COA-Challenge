@@ -38,7 +38,6 @@ namespace COA.Domain.Common
         }
 
     }
-
     public class Result<T> : Result where T : class
     {
         public T Value { get; set; }
