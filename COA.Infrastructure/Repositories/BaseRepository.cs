@@ -1,5 +1,4 @@
-﻿using COA.Domain.Common;
-using COA.Domain.Entities;
+﻿using COA.Domain.Entities;
 using COA.Infrastructure.Data;
 using COA.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -35,22 +34,19 @@ namespace COA.Infrastructure.Repositories
             var response = await _entity.Where(x => x.IsDeleted == false).ToListAsync();
             return response;
         }
-        public async Task<Result> Insert(T entity)
+        public async Task Insert(T entity)
         {
             entity.CreatedAt = DateTime.Now;
             entity.IsDeleted = false;
 
-            var response = await _entity.AddAsync(entity);
-            return new Result().Success("Se ha agregado con exito!!");
+            await _entity.AddAsync(entity);
         }
-        public async Task<Result> Update(T entity)
+        public async Task Update(T entity)
         {
             entity.CreatedAt = DateTime.Now;
             _context.Update(entity);
-
-            return new Result().Success($"Se ha actualizado correctamente!!");
         }
-        public async Task<Result> Delete(int id)
+        public async Task Delete(int id)
         {
             var entity = await _entity.FindAsync(id);
 
@@ -58,7 +54,6 @@ namespace COA.Infrastructure.Repositories
             entity.CreatedAt = DateTime.Now;
 
             _entity.Update(entity);
-            return new Result().Success($"Se ha borrado correctamente");
         }
         public bool EntityExists(int id)
         {
