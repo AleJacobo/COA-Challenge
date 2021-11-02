@@ -11,7 +11,6 @@ using COA.Infrastructure.Repositories.Interfaces;
 using COA.Tests.TestHelper;
 using COA_Challenge.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -216,7 +215,7 @@ namespace COA.Tests.Tests
                 controller.ModelState.AddModelError("Email", "The Email field is not a valid e-mail address.");
 
                 //Act
-                var update = await controller.Update(updateUser,1);
+                var update = await controller.Update(updateUser, 1);
                 var result = update as BadRequestObjectResult;
 
                 //Assert

@@ -22,7 +22,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using static System.Net.WebRequestMethods;
 
 namespace COA_Challenge
 {

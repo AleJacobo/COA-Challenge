@@ -29,7 +29,7 @@ namespace COA.Domain.Common
             HasErrors = false;
             Messages = new List<string>();
         }
-        
+
         #region About: SuccessOverload
         /// <summary>
         /// Overload Task para Success. No se manda mensaje al usuario

@@ -47,7 +47,7 @@ namespace COA_Challenge.Controllers
 
             return Ok(response);
         }
-        
+
         #region Documentation
         /// <summary>
         /// Endpoint para la obtencion de un usuario, identificado por Id
